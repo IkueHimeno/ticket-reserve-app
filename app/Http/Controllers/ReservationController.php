@@ -23,13 +23,19 @@ class ReservationController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
         if(!$request->selected_seats)
         {
             return back()->with('error','座席を選択してください。');
         }
 
         $seatDataArray = explode('|', $request->selected_seats);
+
+        $alreadyReservedByMe = Reservation::where('performance_schedule_id', $request->schedule_id)
+                                        ->where('user_id', auth()->id())
+                                        ->exists();
+        if ($alreadyReservedByMe) {
+            return redirect()->route('dashboard')->with('error', 'この公演はすでに予約済みです。');
+        }
 
         DB::beginTransaction();
 
@@ -48,6 +54,7 @@ class ReservationController extends Controller
                 if($seat) {
                     $isAlreadyReserved = Reservation::where('performance_schedule_id', $request->schedule_id)
                         ->where('seat_id', $seat->id)
+                        ->lockForUpdate()
                         ->exists();
                     
                     if ($isAlreadyReserved) {
@@ -92,6 +99,6 @@ class ReservationController extends Controller
 
         $reservation->delete();
 
-        return back()->with('success', '予約をキャンセルしました。');
+        return back()->with('error', '予約をキャンセルしました。');
     }
 }

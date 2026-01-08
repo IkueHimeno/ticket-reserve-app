@@ -9,6 +9,44 @@
         <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
             
             <div style="background: rgba(15, 27, 61, 0.7); border: 1px solid var(--color-primary); border-radius: 15px; padding: 40px; box-shadow: 0 0 20px rgba(79, 163, 255, 0.2); backdrop-filter: blur(10px);">
+
+                @if (session('success'))
+                    <div style="background: rgba(79, 163, 255, 0.1); 
+                                            border: 1px solid var(--color-primary); 
+                                            color: var(--color-accent); 
+                                            padding: 15px;
+                                            font-weight: bold;
+                                            border-radius: 8px; 
+                                            margin-bottom: 20px; 
+                                            text-align: center; 
+                                            box-shadow: 0 0 15px rgba(79, 163, 255, 0.2);
+                                            animation: fadeIn 0.5s ease-out;">
+                            {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div style="background: rgba(255, 79, 79, 0.1); 
+                                border: 1px solid #ff4f4f; 
+                                color: #ff4f4f; 
+                                padding: 15px; 
+                                border-radius: 8px; 
+                                margin-bottom: 20px; 
+                                text-align: center; 
+                                box-shadow: 0 0 15px rgba(255, 79, 79, 0.2);
+                                animation: fadeIn 0.5s ease-out;
+                                font-weight: bold;
+                                letter-spacing: 0.1em;">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <style>
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(-10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                </style>
                 
                 <h3 style="font-size: 1.2rem; font-weight: bold; color: var(--color-accent); letter-spacing: 0.2em; margin-bottom: 30px; border-bottom: 1px solid rgba(0, 255, 127, 0.3); padding-bottom: 15px;">
                     現在の予約状況
