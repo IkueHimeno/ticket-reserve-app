@@ -11,7 +11,7 @@ class PerformanceSchedule extends Model
 
     public function performance()
     {
-        return $this->belongsTo(performance::class);
+        return $this->belongsTo(Performance::class);
 
     }
 
