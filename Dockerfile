@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
     unzip \
+    curl \
+    && curl -sL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && docker-php-ext-install pdo_mysql pdo_pgsql gd
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -21,9 +24,11 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN npm install
+RUN npm run build
+
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
 
-CMD php artisan migrate --force && apache2-foreground
 CMD php artisan migrate --force && php artisan db:seed --force && apache2-foreground
