@@ -13,11 +13,15 @@ class SeatSeeder extends Seeder
 
         foreach ($rows as $row) {
             for ($num = 1; $num <= 8; $num++) {
-                Seat::create([
-                    'row_name' => $row,
-                    'seat_number' => $num,
+                Seat::updateOrCreate(
+                    [
+                        'row_name' => $row,
+                        'seat_number' => $num,
+                    ],
+                    [
                     'rank' => ($row === 'A') ? '宇宙人シート' : '地球人シート',
-                ]);
+                    ]
+                );
             }
         }
     }
